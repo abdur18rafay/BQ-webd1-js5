@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Store API Example</title>
+</head>
+
+<body>
+    <h1>Fake Store API Example</h1>
+
+    <div id="productsContainer"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchData();
+        });
+
+        function fetchData() {
+            fetch('https://fakestoreapi.com/products')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderProducts(data);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        function renderProducts(products) {
+            const productsContainer = document.getElementById('productsContainer');
+            productsContainer.innerHTML = ''; 
+
+            products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.classList.add('product');
+                productElement.innerHTML = `
+            <h3>${product.title}</h3>
+            <p><strong>Category:</strong> ${product.category}</p>
+            <p><strong>Price:</strong> $${product.price}</p>
+            <p><strong>Description:</strong> ${product.description}</p>
+            <img src="${product.image}" alt="${product.title}" width="200">
+        `;
+                productsContainer.appendChild(productElement);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
